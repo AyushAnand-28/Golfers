@@ -83,12 +83,18 @@ export default function SignupPage() {
 
       // 3. Create Razorpay Order from backend
       const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001'
-      const res = await fetch(`${backendUrl}/api/create-razorpay-order`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plan: form.plan, userId, email: form.email })
-      });
-      const data = await res.json();
+      
+      let res, data;
+      try {
+        res = await fetch(`${backendUrl}/api/create-razorpay-order`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ plan: form.plan, userId, email: form.email })
+        });
+        data = await res.json();
+      } catch {
+        throw new Error(`Cannot reach payment server at ${backendUrl}. Check VITE_API_URL in your Vercel environment variables.`);
+      }
       
       if (!res.ok) throw new Error(data.error?.description || data.error?.message || data.error || 'Failed to initialize payment');
 
