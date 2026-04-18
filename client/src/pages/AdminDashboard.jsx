@@ -78,7 +78,15 @@ export default function AdminDashboard() {
             </div>
           </div>
         )
-      case 'users':
+      case 'users': {
+        const mockUsers = [
+          { id: 1, name: 'Arjun Mehta', email: 'arjun.m@example.com', role: 'User', status: 'Active', plan: 'Monthly', charity: 'Save the Children India', contribution: '10%' },
+          { id: 2, name: 'Priya Sharma', email: 'priya.s@example.com', role: 'Admin', status: 'Active', plan: 'Yearly', charity: 'Oxfam India', contribution: '10%' },
+          { id: 3, name: 'Rohan Gupta', email: 'rohan.g@example.com', role: 'User', status: 'Past Due', plan: 'Monthly', charity: 'WWF India', contribution: '10%' },
+          { id: 4, name: 'Ananya Desai', email: 'ananya.d@example.com', role: 'User', status: 'Active', plan: 'Monthly', charity: 'Akshaya Patra', contribution: '10%' },
+          { id: 5, name: 'Vikram Singh', email: 'vikram.s@example.com', role: 'User', status: 'Cancelled', plan: '-', charity: '-', contribution: '-' },
+        ]
+
         return (
           <div className="glass-card-static" style={{ padding: 'var(--space-6)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-6)' }}>
@@ -100,19 +108,32 @@ export default function AdminDashboard() {
                   </tr>
                 </thead>
                 <tbody>
-                  {[1, 2, 3].map(i => (
-                    <tr key={i}>
+                  {mockUsers.map(user => (
+                    <tr key={user.id}>
                       <td>
-                        <div style={{ fontWeight: 600 }}>Demo User {i}</div>
-                        <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>user{i}@example.com</div>
+                        <div style={{ fontWeight: 600 }}>{user.name}</div>
+                        <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>{user.email}</div>
                       </td>
-                      <td><span className="badge badge-neutral">User</span></td>
-                      <td><span className="badge badge-success">Active</span></td>
                       <td>
-                        <div>Demo Charity #{i}</div>
-                        <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>10% contribution</div>
+                        <span className={`badge ${user.role === 'Admin' ? 'badge-primary' : 'badge-neutral'}`}>
+                          {user.role}
+                        </span>
                       </td>
-                      <td><button className="btn btn-ghost btn-sm" style={{ color: 'var(--color-emerald)' }}>Manage</button></td>
+                      <td>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                          <span className={`badge ${user.status === 'Active' ? 'badge-success' : user.status === 'Past Due' ? 'badge-danger' : 'badge-neutral'}`} style={{ width: 'fit-content' }}>
+                            {user.status}
+                          </span>
+                          {user.plan !== '-' && <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>{user.plan}</span>}
+                        </div>
+                      </td>
+                      <td>
+                        <div style={{ fontWeight: 500 }}>{user.charity}</div>
+                        <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>{user.contribution !== '-' ? `${user.contribution} contribution` : '-'}</div>
+                      </td>
+                      <td>
+                        <button className="btn btn-ghost btn-sm" style={{ color: 'var(--color-emerald)' }}>Manage</button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -120,6 +141,7 @@ export default function AdminDashboard() {
             </div>
           </div>
         )
+      }
       case 'charities':
         return (
           <div className="glass-card-static" style={{ padding: 'var(--space-6)' }}>

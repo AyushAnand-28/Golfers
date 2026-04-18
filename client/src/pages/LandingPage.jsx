@@ -1,12 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight, Heart, Trophy, TrendingUp, Star, CheckCircle, ChevronRight, Zap, Shield, Globe } from 'lucide-react'
 import { supabase } from '../lib/supabase'
+import { useAuth } from '../contexts/AuthContext'
 
 const CHARITIES_MOCK = [
-  { id: 1, name: 'Children First Foundation', description: 'Providing education and healthcare to underprivileged children worldwide.', raised: '₹42,80,000', image: null, category: 'Children' },
-  { id: 2, name: 'Green Earth Initiative', description: 'Planting trees and restoring ecosystems damaged by climate change.', raised: '₹28,50,000', image: null, category: 'Environment' },
-  { id: 3, name: 'Veterans Support Network', description: 'Mental health and rehabilitation support for military veterans.', raised: '₹36,20,000', image: null, category: 'Veterans' },
+  { id: 1, name: 'Children First Foundation', description: 'Providing education and healthcare to underprivileged children worldwide.', raised: '₹42,80,000', image: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=600&q=80', category: 'Children' },
+  { id: 2, name: 'Green Earth Initiative', description: 'Planting trees and restoring ecosystems damaged by climate change.', raised: '₹28,50,000', image: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=600&q=80', category: 'Environment' },
+  { id: 3, name: 'Veterans Support Network', description: 'Mental health and rehabilitation support for military veterans.', raised: '₹36,20,000', image: 'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?auto=format&fit=crop&w=600&q=80', category: 'Veterans' },
 ]
 
 const HOW_IT_WORKS = [
@@ -17,7 +18,7 @@ const HOW_IT_WORKS = [
 ]
 
 const FEATURES = [
-  { icon: <Shield size={24} />, title: 'Secure Payments', desc: 'Stripe-powered subscriptions with bank-level security and PCI compliance.' },
+  { icon: <Shield size={24} />, title: 'Secure Payments', desc: 'Razorpay-powered subscriptions with bank-level security and PCI compliance.' },
   { icon: <Globe size={24} />, title: 'Real Charity Impact', desc: 'Transparent contribution tracking. See exactly how much your subscription is doing good.' },
   { icon: <Zap size={24} />, title: 'Monthly Draws', desc: 'Automated draw engine ensures fair, transparent results every single month.' },
   { icon: <TrendingUp size={24} />, title: 'Growing Jackpot', desc: 'Unclaimed jackpots roll over, making each month\'s 5-match prize even bigger.' },
@@ -33,7 +34,7 @@ const STATS = [
 export default function LandingPage() {
   const [featuredCharity, setFeaturedCharity] = useState(CHARITIES_MOCK[0])
   const [charities, setCharities] = useState(CHARITIES_MOCK)
-  const heroRef = useRef(null)
+  const { user } = useAuth()
 
   useEffect(() => {
     document.title = 'GreenHeart — Golf with Purpose'
@@ -55,17 +56,17 @@ export default function LandingPage() {
         overflow: 'hidden',
         padding: '120px 0 80px'
       }}>
-        {/* Animated background */}
+        {/* Animated background & Golf Image Overlay */}
         <div style={{
           position: 'absolute', inset: 0,
-          background: 'var(--gradient-hero)',
+          background: `linear-gradient(to bottom, rgba(6,11,20,0.85) 0%, rgba(6,11,20,0.95) 100%), url('/image.png') center/cover scroll no-repeat`,
           zIndex: 0
         }} />
         <div style={{
           position: 'absolute', inset: 0, zIndex: 0,
           backgroundImage: `
-            radial-gradient(ellipse 60% 50% at 50% -20%, rgba(16,185,129,0.12) 0%, transparent 70%),
-            radial-gradient(ellipse 40% 30% at 80% 60%, rgba(37,99,235,0.08) 0%, transparent 60%)
+            radial-gradient(ellipse 60% 50% at 50% -20%, rgba(16,185,129,0.2) 0%, transparent 70%),
+            radial-gradient(ellipse 40% 30% at 80% 60%, rgba(37,99,235,0.15) 0%, transparent 60%)
           `
         }} />
         
@@ -108,12 +109,18 @@ export default function LandingPage() {
 
             {/* CTAs */}
             <div className="animate-fade-up animate-delay-3" style={{ display: 'flex', gap: 'var(--space-4)', justifyContent: 'center', flexWrap: 'wrap', marginBottom: 'var(--space-12)' }}>
-              <Link to="/signup" className="btn btn-primary btn-lg">
-                Start for ₹999/month <ArrowRight size={18} />
-              </Link>
-              <Link to="/how-it-works" className="btn btn-secondary btn-lg">
+              {user ? (
+                <Link to="/dashboard" className="btn btn-primary btn-lg">
+                  Go to Dashboard <ArrowRight size={18} />
+                </Link>
+              ) : (
+                <Link to="/signup" className="btn btn-primary btn-lg">
+                  Start for ₹999/month <ArrowRight size={18} />
+                </Link>
+              )}
+              <a href="#how-it-works" className="btn btn-secondary btn-lg">
                 See How It Works
-              </Link>
+              </a>
             </div>
 
             {/* Trust badges */}
@@ -121,7 +128,7 @@ export default function LandingPage() {
               {[
                 { icon: <CheckCircle size={16} />, text: 'No hidden fees' },
                 { icon: <CheckCircle size={16} />, text: 'Cancel anytime' },
-                { icon: <CheckCircle size={16} />, text: 'Stripe-secured' },
+                { icon: <CheckCircle size={16} />, text: 'Razorpay-secured' },
               ].map((b, i) => (
                 <span key={i} style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>
                   <span style={{ color: 'var(--color-emerald)' }}>{b.icon}</span>
@@ -346,16 +353,18 @@ export default function LandingPage() {
           {/* Charity grid */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--space-5)' }}>
             {charities.map((charity, i) => (
-              <div key={charity.id || i} className="glass-card" style={{ padding: 'var(--space-6)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', marginBottom: 'var(--space-4)' }}>
-                  <div style={{ width: 44, height: 44, borderRadius: 'var(--radius-md)', background: `hsl(${i * 40 + 140}, 60%, 15%)`, border: `1px solid hsl(${i * 40 + 140}, 60%, 30%)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem' }}>
-                    {['💚', '🌿', '🎖️'][i % 3]}
+              <div key={charity.id || i} className="glass-card" style={{ padding: 0, overflow: 'hidden' }}>
+                <div style={{ height: 160, backgroundImage: `url(${charity.image})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+                <div style={{ padding: 'var(--space-6)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', marginBottom: 'var(--space-4)' }}>
+                    <div style={{ width: 44, height: 44, borderRadius: 'var(--radius-md)', background: `hsl(${i * 40 + 140}, 60%, 15%)`, border: `1px solid hsl(${i * 40 + 140}, 60%, 30%)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', flexShrink: 0 }}>
+                      {['💚', '🌿', '🎖️'][i % 3]}
+                    </div>
+                    <div>
+                      <div style={{ fontWeight: 600, color: 'var(--color-text-primary)', fontSize: '0.9375rem', lineHeight: 1.2 }}>{charity.name}</div>
+                      <span className="badge badge-neutral" style={{ marginTop: 4 }}>{charity.category || 'Charity'}</span>
+                    </div>
                   </div>
-                  <div>
-                    <div style={{ fontWeight: 600, color: 'var(--color-text-primary)', fontSize: '0.9375rem' }}>{charity.name}</div>
-                    <span className="badge badge-neutral" style={{ marginTop: 2 }}>{charity.category || 'Charity'}</span>
-                  </div>
-                </div>
                 <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', lineHeight: 1.6, marginBottom: 'var(--space-4)' }}>
                   {charity.description}
                 </p>
@@ -364,6 +373,7 @@ export default function LandingPage() {
                   <Link to="/charities" style={{ color: 'var(--color-emerald)', fontSize: '0.875rem', display: 'flex', alignItems: 'center', gap: 4 }}>
                     Learn more <ChevronRight size={14} />
                   </Link>
+                </div>
                 </div>
               </div>
             ))}
@@ -430,9 +440,15 @@ export default function LandingPage() {
                   <span style={{ fontSize: '0.9rem', color: 'var(--color-text-secondary)' }}>{f}</span>
                 </div>
               ))}
-              <Link to="/signup?plan=monthly" className="btn btn-secondary" style={{ width: '100%', marginTop: 'var(--space-4)' }}>
-                Get Started
-              </Link>
+              {user ? (
+                <Link to="/dashboard" className="btn btn-secondary" style={{ width: '100%', marginTop: 'var(--space-4)' }}>
+                  Manage Subscription
+                </Link>
+              ) : (
+                <Link to="/signup?plan=monthly" className="btn btn-secondary" style={{ width: '100%', marginTop: 'var(--space-4)' }}>
+                  Get Started
+                </Link>
+              )}
             </div>
 
             {/* Yearly */}
@@ -461,9 +477,15 @@ export default function LandingPage() {
                   <span style={{ fontSize: '0.9rem', color: 'var(--color-text-secondary)' }}>{f}</span>
                 </div>
               ))}
-              <Link to="/signup?plan=yearly" className="btn btn-primary" style={{ width: '100%', marginTop: 'var(--space-4)' }}>
-                Save 20% — Start Yearly <ArrowRight size={16} />
-              </Link>
+              {user ? (
+                <Link to="/dashboard" className="btn btn-primary" style={{ width: '100%', marginTop: 'var(--space-4)' }}>
+                  Manage Subscription <ArrowRight size={16} />
+                </Link>
+              ) : (
+                <Link to="/signup?plan=yearly" className="btn btn-primary" style={{ width: '100%', marginTop: 'var(--space-4)' }}>
+                  Save 20% — Start Yearly <ArrowRight size={16} />
+                </Link>
+              )}
             </div>
           </div>
         </div>
@@ -472,10 +494,15 @@ export default function LandingPage() {
       {/* ===== CTA BANNER ===== */}
       <section style={{
         padding: 'var(--space-24) 0',
-        background: 'linear-gradient(135deg, rgba(16,185,129,0.1) 0%, rgba(6,11,20,1) 50%, rgba(37,99,235,0.08) 100%)',
+        position: 'relative',
         borderTop: '1px solid var(--color-border)'
       }}>
-        <div className="container" style={{ textAlign: 'center' }}>
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'linear-gradient(135deg, rgba(6,11,20,0.9) 0%, rgba(6,11,20,0.95) 100%), url(https://loremflickr.com/1920/1080/golf,swing/all) center/cover scroll no-repeat',
+          zIndex: 0
+        }} />
+        <div className="container" style={{ textAlign: 'center', position: 'relative', zIndex: 1 }}>
           <h2 style={{ marginBottom: 'var(--space-4)' }}>
             Ready to Play with{' '}
             <span className="gradient-text">Purpose?</span>
@@ -484,9 +511,15 @@ export default function LandingPage() {
             Join 12,400+ golfers who are winning prizes and making a real difference every month.
           </p>
           <div style={{ display: 'flex', gap: 'var(--space-4)', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link to="/signup" className="btn btn-primary btn-lg">
-              Join GreenHeart Today <ArrowRight size={18} />
-            </Link>
+            {user ? (
+              <Link to="/dashboard" className="btn btn-primary btn-lg">
+                Go to Dashboard <ArrowRight size={18} />
+              </Link>
+            ) : (
+              <Link to="/signup" className="btn btn-primary btn-lg">
+                Join GreenHeart Today <ArrowRight size={18} />
+              </Link>
+            )}
             <Link to="/charities" className="btn btn-secondary btn-lg">
               <Heart size={16} /> Explore Charities
             </Link>

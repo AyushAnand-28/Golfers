@@ -2,7 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { createClient } = require('@supabase/supabase-js');
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const Razorpay = require('razorpay');
+const crypto = require('crypto');
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -23,70 +24,57 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok', service: 'golfers-api' });
 });
 
+const razorpay = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID || 'placeholder_id',
+  key_secret: process.env.RAZORPAY_KEY_SECRET || 'placeholder_secret',
+});
+
 /* ==========================================
-   STRIPE SUBSCRIPTION ENDPOINTS
+   RAZORPAY SUBSCRIPTION ENDPOINTS
    ========================================== */
 
-// Create Stripe checkout session
-app.post('/api/create-checkout-session', async (req, res) => {
+// Create Razorpay Order
+app.post('/api/create-razorpay-order', async (req, res) => {
   try {
     const { plan, userId, email } = req.body;
     
-    // In actual implementation, match plan to Stripe Price IDs
-    const priceId = plan === 'yearly' 
-      ? process.env.STRIPE_YEARLY_PRICE_ID 
-      : process.env.STRIPE_MONTHLY_PRICE_ID;
+    // Generate pricing amount in Paise (Razorpay expects smallest currency unit)
+    const amount = plan === 'yearly' ? 9590 * 100 : 999 * 100;
 
-    // Optional: Fetch customer or create one using email
-    
-    // Create session (omitted full stripe object mapping for brevity)
-    /*
-    const session = await stripe.checkout.sessions.create({
-      mode: 'subscription',
-      payment_method_types: ['card'],
-      line_items: [{ price: priceId, quantity: 1 }],
-      success_url: `${process.env.CLIENT_URL}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.CLIENT_URL}/pricing`,
-      metadata: { userId }
-    });
-    res.json({ url: session.url });
-    */
-    res.json({ message: "Stripe checkout session placeholder" });
+    const options = {
+      amount,
+      currency: "INR",
+      receipt: `receipt_${userId}_${Math.floor(Date.now() / 1000)}`
+    };
+
+    const order = await razorpay.orders.create(options);
+    res.json({ order, key_id: process.env.RAZORPAY_KEY_ID });
   } catch (error) {
-    console.error(error);
+    console.error('Razorpay Error:', error);
     res.status(500).json({ error: error.message });
   }
 });
 
-app.post('/api/webhook', express.raw({type: 'application/json'}), async (req, res) => {
-  const sig = req.headers['stripe-signature'];
-  let event;
-
+app.post('/api/verify-razorpay-payment', async (req, res) => {
   try {
-    // Note: requires setting STRIPE_WEBHOOK_SECRET
-    event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET || 'placeholder');
-  } catch (err) {
-    console.error(`Webhook Error: ${err.message}`);
-    return res.status(400).send(`Webhook Error: ${err.message}`);
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature, userId } = req.body;
+    
+    const sign = razorpay_order_id + "|" + razorpay_payment_id;
+    const expectedSign = crypto.createHmac("sha256", process.env.RAZORPAY_KEY_SECRET || 'placeholder_secret')
+                            .update(sign.toString())
+                            .digest("hex");
+                            
+    if (razorpay_signature === expectedSign) {
+       console.log(`Payment successful for user: ${userId}`);
+       // TODO: Update Supabase subscriptions table here
+       res.json({ success: true, message: "Payment verified successfully" });
+    } else {
+       res.status(400).json({ success: false, message: "Invalid signature" });
+    }
+  } catch (error) {
+    console.error('Verification Error:', error);
+    res.status(500).json({ error: error.message });
   }
-
-  // Handle the event
-  switch (event.type) {
-    case 'checkout.session.completed':
-      const session = event.data.object;
-      console.log(`Payment successful for user: ${session.metadata.userId}`);
-      // await supabase.from('subscriptions').update({ status: 'active' }).eq('user_id', session.metadata.userId)
-      break;
-    case 'customer.subscription.deleted':
-      const subscriptionInfo = event.data.object;
-      console.log(`Subscription deleted: ${subscriptionInfo.id}`);
-      // await supabase.from('subscriptions').update({ status: 'canceled' }).eq('stripe_subscription_id', subscriptionInfo.id)
-      break;
-    default:
-      console.log(`Unhandled event type ${event.type}`);
-  }
-
-  res.status(200).send('Webhook Processed');
 });
 
 /* ==========================================

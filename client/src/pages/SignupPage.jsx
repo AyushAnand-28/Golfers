@@ -65,15 +65,76 @@ export default function SignupPage() {
     e.preventDefault()
     setLoading(true)
     try {
-      await signUp({
+      // 1. Create Supabase User
+      const userResult = await signUp({
         email: form.email,
         password: form.password,
         name: form.name,
         charityId: selectedCharity,
         charityPercentage: charityPct,
       })
-      toast('Account created! Welcome to GreenHeart 🎉', 'success')
-      navigate('/dashboard')
+      
+      const userId = userResult?.user?.id || 'demo_user';
+      
+      // 2. Load Razorpay Script
+      const { loadRazorpay } = await import('../lib/razorpay')
+      const loaded = await loadRazorpay();
+      if (!loaded) throw new Error('Razorpay failed to load. Check your connection.');
+
+      // 3. Create Razorpay Order from backend
+      // Assuming backend is proxying or available on REACT_APP_API_URL or relative
+      const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+      const res = await fetch(`${backendUrl}/api/create-razorpay-order`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plan: form.plan, userId, email: form.email })
+      });
+      const data = await res.json();
+      
+      if (!res.ok) throw new Error(data.error || 'Failed to initialize payment');
+
+      // 4. Open Razorpay Interface
+      const options = {
+        key: data.key_id,
+        amount: data.order.amount,
+        currency: "INR",
+        name: "GreenHeart Platform",
+        description: `${form.plan.charAt(0).toUpperCase() + form.plan.slice(1)} Subscription`,
+        order_id: data.order.id,
+        handler: async function (response) {
+            try {
+              // Verify payment
+              const verifyRes = await fetch(`${backendUrl}/api/verify-razorpay-payment`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                      razorpay_payment_id: response.razorpay_payment_id,
+                      razorpay_order_id: response.razorpay_order_id,
+                      razorpay_signature: response.razorpay_signature,
+                      userId
+                  })
+              });
+              const verifyData = await verifyRes.json();
+              if(verifyData.success){
+                toast('Account created and subscribed! Welcome to GreenHeart 🎉', 'success')
+                navigate('/dashboard')
+              } else {
+                toast('Payment verification failed.', 'error')
+              }
+            } catch {
+               toast('Error verifying payment', 'error')
+            }
+        },
+        prefill: { name: form.name, email: form.email },
+        theme: { color: "#10b981" }
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.on('payment.failed', function (response){
+          toast(response.error.description || 'Payment Failed', 'error');
+      });
+      rzp.open();
+      
     } catch (err) {
       toast(err.message || 'Signup failed. Try again.', 'error')
     } finally {
@@ -312,7 +373,7 @@ export default function SignupPage() {
 
               <p style={{ textAlign: 'center', fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: 'var(--space-4)' }}>
                 By signing up, you agree to our Terms of Service and Privacy Policy.
-                Your subscription will be processed securely via Stripe.
+                Your subscription will be processed securely via Razorpay.
               </p>
             </form>
           )}

@@ -10,12 +10,12 @@ export default function CharitiesPage() {
 
   // Mock data as fallback
   const mockCharities = [
-    { id: 1, name: 'Children First Foundation', description: 'Providing education, healthcare, and safe housing to underprivileged children worldwide. Every contribution helps build a school or medical center.', raised: '₹42,80,000', category: 'Children', website: 'https://example.com' },
-    { id: 2, name: 'Green Earth Initiative', description: 'Planting trees, fighting deforestation, and restoring ecosystems damaged by climate change. Join us to make the planet green again.', raised: '₹28,50,000', category: 'Environment', website: 'https://example.com' },
-    { id: 3, name: 'Veterans Support Network', description: 'Mental health and physical rehabilitation support for military veterans transitioning to civilian life.', raised: '₹36,20,000', category: 'Veterans', website: 'https://example.com' },
-    { id: 4, name: 'Medical Relief Intl', description: 'Delivering urgent medical supplies and training local staff in crisis zones around the globe.', raised: '₹15,40,000', category: 'Health', website: 'https://example.com' },
-    { id: 5, name: 'Ocean Protectors', description: 'Cleaning the oceans by removing plastics and fighting for marine life conservation.', raised: '₹22,10,000', category: 'Environment', website: 'https://example.com' },
-    { id: 6, name: 'Local Food Banks UK', description: 'Ensuring no family goes hungry. Distributing meals to communities facing food insecurity.', raised: '₹55,90,000', category: 'Community', website: 'https://example.com' },
+    { id: 1, name: 'Children First Foundation', description: 'Providing education, healthcare, and safe housing to underprivileged children worldwide. Every contribution helps build a school or medical center.', raised: '₹42,80,000', category: 'Children', website: 'https://example.com', image: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=600&q=80' },
+    { id: 2, name: 'Green Earth Initiative', description: 'Planting trees, fighting deforestation, and restoring ecosystems damaged by climate change. Join us to make the planet green again.', raised: '₹28,50,000', category: 'Environment', website: 'https://example.com', image: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=600&q=80' },
+    { id: 3, name: 'Veterans Support Network', description: 'Mental health and physical rehabilitation support for military veterans transitioning to civilian life.', raised: '₹36,20,000', category: 'Veterans', website: 'https://example.com', image: 'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?auto=format&fit=crop&w=600&q=80' },
+    { id: 4, name: 'Medical Relief Intl', description: 'Delivering urgent medical supplies and training local staff in crisis zones around the globe.', raised: '₹15,40,000', category: 'Health', website: 'https://example.com', image: 'https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=600&q=80' },
+    { id: 5, name: 'Ocean Protectors', description: 'Cleaning the oceans by removing plastics and fighting for marine life conservation.', raised: '₹22,10,000', category: 'Environment', website: 'https://example.com', image: 'https://images.unsplash.com/photo-1621451537084-482c73073e0f?auto=format&fit=crop&w=600&q=80' },
+    { id: 6, name: 'Local Food Banks UK', description: 'Ensuring no family goes hungry. Distributing meals to communities facing food insecurity.', raised: '₹55,90,000', category: 'Community', website: 'https://example.com', image: 'https://images.unsplash.com/photo-1488459716781-31db52582fe9?auto=format&fit=crop&w=600&q=80' },
   ]
 
   useEffect(() => {
@@ -112,12 +112,12 @@ export default function CharitiesPage() {
                 <div key={charity.id} className="glass-card" style={{ display: 'flex', flexDirection: 'column' }}>
                   {/* Card Header / Image placeholder */}
                   <div style={{
-                    height: 140, background: `linear-gradient(135deg, hsl(${i * 60 + 140}, 60%, 15%), hsl(${i * 60 + 200}, 40%, 10%))`,
+                    height: 140, background: charity.image ? `url(${charity.image}) center/cover no-repeat` : `linear-gradient(135deg, hsl(${i * 60 + 140}, 60%, 15%), hsl(${i * 60 + 200}, 40%, 10%))`,
                     borderTopLeftRadius: 'var(--radius-lg)', borderTopRightRadius: 'var(--radius-lg)',
                     position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center'
                   }}>
-                    <Heart size={48} color="rgba(255,255,255,0.1)" />
-                    <span className="badge badge-neutral" style={{ position: 'absolute', top: 16, right: 16, background: 'rgba(0,0,0,0.5)', border: 'none' }}>
+                    {!charity.image && <Heart size={48} color="rgba(255,255,255,0.1)" />}
+                    <span className="badge badge-neutral" style={{ position: 'absolute', top: 16, right: 16, background: 'rgba(0,0,0,0.5)', border: 'none', color: '#fff', backdropFilter: 'blur(4px)' }}>
                       {charity.category}
                     </span>
                   </div>

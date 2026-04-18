@@ -5,6 +5,17 @@ import { supabase } from '../lib/supabase'
 import { CreditCard, Trophy, Target, Heart, Plus, History, Settings, LogOut, AlertCircle, Menu, X, Home } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
+// eslint-disable-next-line no-unused-vars
+const NavLink = ({ id, icon: Icon, label, activeTab, setActiveTab, setSidebarOpen }) => (
+  <button 
+    onClick={() => { setActiveTab(id); setSidebarOpen(false); }} 
+    className={`sidebar-nav-link ${activeTab === id ? 'active' : ''}`}
+    style={{ width: '100%', background: activeTab === id ? 'var(--color-emerald-glow)' : 'transparent', border: 'none', textAlign: 'left', cursor: 'pointer' }}
+  >
+    <Icon size={18} /> {label}
+  </button>
+)
+
 export default function DashboardPage() {
   const { profile, user, signOut } = useAuth()
   const { toast } = useToast()
@@ -22,6 +33,7 @@ export default function DashboardPage() {
   useEffect(() => {
     document.title = 'Dashboard — GreenHeart'
     fetchData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
 
   async function fetchData() {
@@ -258,7 +270,7 @@ export default function DashboardPage() {
         return (
           <div className="glass-card-static" style={{ padding: 'var(--space-6)' }}>
             <h3>Subscription Management</h3>
-            <p style={{ color: 'var(--color-text-muted)', marginBottom: 'var(--space-6)' }}>Manage your payment methods and subscription billing cycle via Stripe.</p>
+            <p style={{ color: 'var(--color-text-muted)', marginBottom: 'var(--space-6)' }}>Manage your payment methods and subscription billing cycle via Razorpay.</p>
             <div style={{ background: 'var(--color-bg-secondary)', padding: 'var(--space-6)', borderRadius: 'var(--radius-lg)', border: '1px solid var(--color-border)', marginBottom: 'var(--space-6)' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
@@ -320,16 +332,8 @@ export default function DashboardPage() {
     }
   }
 
-  // Sidebar link helper
-  const NavLink = ({ id, icon: Icon, label }) => (
-    <button 
-      onClick={() => { setActiveTab(id); setSidebarOpen(false); }} 
-      className={`sidebar-nav-link ${activeTab === id ? 'active' : ''}`}
-      style={{ width: '100%', background: activeTab === id ? 'var(--color-emerald-glow)' : 'transparent', border: 'none', textAlign: 'left', cursor: 'pointer' }}
-    >
-      <Icon size={18} /> {label}
-    </button>
-  )
+  // Sidebar link helper removed to avoid nested component creation
+  // Inline rendering below
 
   return (
     <div className="dashboard-layout">
@@ -356,13 +360,13 @@ export default function DashboardPage() {
           </button>
 
           <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 'var(--space-2)', padding: '0 var(--space-4)' }}>Menu</div>
-          <NavLink id="overview" icon={Target} label="Overview" />
-          <NavLink id="scores" icon={History} label="My Scores" />
-          <NavLink id="winnings" icon={Trophy} label="Draws & Winnings" />
+          <NavLink id="overview" icon={Target} label="Overview" activeTab={activeTab} setActiveTab={setActiveTab} setSidebarOpen={setSidebarOpen} />
+          <NavLink id="scores" icon={History} label="My Scores" activeTab={activeTab} setActiveTab={setActiveTab} setSidebarOpen={setSidebarOpen} />
+          <NavLink id="winnings" icon={Trophy} label="Draws & Winnings" activeTab={activeTab} setActiveTab={setActiveTab} setSidebarOpen={setSidebarOpen} />
           
           <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 'var(--space-6) 0 var(--space-2)', padding: '0 var(--space-4)' }}>Account</div>
-          <NavLink id="billing" icon={CreditCard} label="Billing" />
-          <NavLink id="settings" icon={Settings} label="Settings" />
+          <NavLink id="billing" icon={CreditCard} label="Billing" activeTab={activeTab} setActiveTab={setActiveTab} setSidebarOpen={setSidebarOpen} />
+          <NavLink id="settings" icon={Settings} label="Settings" activeTab={activeTab} setActiveTab={setActiveTab} setSidebarOpen={setSidebarOpen} />
         </nav>
 
         <div style={{ padding: 'var(--space-4)', borderTop: '1px solid var(--color-border)', marginTop: 'auto' }}>

@@ -8,7 +8,23 @@ export function AuthProvider({ children }) {
   const [profile, setProfile] = useState(null)
   const [loading, setLoading] = useState(true)
 
+  const isMock = import.meta.env.VITE_SUPABASE_URL ? import.meta.env.VITE_SUPABASE_URL.includes('placeholder') : true;
+
   useEffect(() => {
+    if (isMock) {
+      const stored = localStorage.getItem('mockUser')
+      if (stored) {
+        try {
+          const mockUser = JSON.parse(stored)
+          setUser(mockUser)
+          fetchProfile(mockUser.id, mockUser.email)
+        } catch { setLoading(false) }
+      } else {
+        setLoading(false)
+      }
+      return
+    }
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null)
       if (session?.user) fetchProfile(session.user.id)
@@ -24,11 +40,10 @@ export function AuthProvider({ children }) {
     return () => subscription.unsubscribe()
   }, [])
 
-  const isMock = import.meta.env.VITE_SUPABASE_URL ? import.meta.env.VITE_SUPABASE_URL.includes('placeholder') : true;
-
-  async function fetchProfile(userId) {
+  async function fetchProfile(userId, emailStr = 'mock@example.com') {
     if (isMock) {
-      setProfile({ id: userId, email: 'mock@example.com', name: 'Demo User', charity_percentage: 10, role: 'user', charities: { name: 'Demo Charity' } })
+      const isMockAdmin = emailStr.toLowerCase().includes('admin');
+      setProfile({ id: userId, email: emailStr, name: 'Demo User', charity_percentage: 10, role: isMockAdmin ? 'admin' : 'user', charities: { name: 'Demo Charity' } })
       setLoading(false)
       return
     }
@@ -43,6 +58,7 @@ export function AuthProvider({ children }) {
       const mockUser = { id: 'mock-id-123', email }
       setUser(mockUser)
       setProfile({ id: mockUser.id, email, name, charity_percentage: charityPercentage, role: isMockAdmin ? 'admin' : 'user', charities: { name: 'Demo Charity' } })
+      localStorage.setItem('mockUser', JSON.stringify(mockUser))
       return { user: mockUser }
     }
     const { data, error } = await supabase.auth.signUp({ email, password, options: { data: { name } } })
@@ -67,6 +83,7 @@ export function AuthProvider({ children }) {
       const mockUser = { id: 'mock-id-123', email }
       setUser(mockUser)
       setProfile({ id: mockUser.id, email, name: 'Demo User', charity_percentage: 10, role: isMockAdmin ? 'admin' : 'user', charities: { name: 'Demo Charity' } })
+      localStorage.setItem('mockUser', JSON.stringify(mockUser))
       return { user: mockUser }
     }
     const { data, error } = await supabase.auth.signInWithPassword({ email, password })
@@ -78,6 +95,7 @@ export function AuthProvider({ children }) {
     if (isMock) {
       setUser(null)
       setProfile(null)
+      localStorage.removeItem('mockUser')
       return
     }
     await supabase.auth.signOut()

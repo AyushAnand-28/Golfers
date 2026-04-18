@@ -20,14 +20,31 @@ export default function Navbar() {
   useEffect(() => { setMenuOpen(false) }, [location])
 
   const handleSignOut = async () => {
+    setUserMenuOpen(false)
     await signOut()
     navigate('/')
   }
 
+  const handleNavClick = (e, href) => {
+    if (href.startsWith('/#') && location.pathname === '/') {
+      e.preventDefault()
+      const id = href.split('#')[1]
+      const element = document.getElementById(id)
+      if (element) {
+        const yOffset = -80 // account for sticky navbar
+        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset
+        window.scrollTo({ top: y, behavior: 'smooth' })
+      }
+      setMenuOpen(false)
+    } else {
+       setMenuOpen(false)
+    }
+  }
+
   const navLinks = [
     { href: '/charities', label: 'Charities' },
-    { href: '/how-it-works', label: 'How It Works' },
-    { href: '/prizes', label: 'Prizes' },
+    { href: '/#how-it-works', label: 'How It Works' },
+    { href: '/#pricing', label: 'Prizes' },
   ]
 
   return (
@@ -47,6 +64,7 @@ export default function Navbar() {
                 <Link
                   key={link.href}
                   to={link.href}
+                  onClick={(e) => handleNavClick(e, link.href)}
                   className={`navbar-link ${location.pathname === link.href ? 'active' : ''}`}
                   style={location.pathname === link.href ? { color: 'var(--color-emerald)' } : {}}
                 >
@@ -141,7 +159,7 @@ export default function Navbar() {
       {/* Mobile overlay to close menus */}
       {(menuOpen || userMenuOpen) && (
         <div
-          style={{ position: 'fixed', inset: 0, zIndex: 'var(--z-sticky)', background: 'transparent' }}
+          style={{ position: 'fixed', inset: 0, zIndex: 90, background: 'transparent' }}
           onClick={() => { setMenuOpen(false); setUserMenuOpen(false) }}
         />
       )}
