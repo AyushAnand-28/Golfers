@@ -10,12 +10,12 @@ export default function CharitiesPage() {
 
   // Mock data as fallback
   const mockCharities = [
-    { id: 1, name: 'Children First Foundation', description: 'Providing education, healthcare, and safe housing to underprivileged children worldwide. Every contribution helps build a school or medical center.', raised: '£42,800', category: 'Children', website: 'https://example.com' },
-    { id: 2, name: 'Green Earth Initiative', description: 'Planting trees, fighting deforestation, and restoring ecosystems damaged by climate change. Join us to make the planet green again.', raised: '£28,500', category: 'Environment', website: 'https://example.com' },
-    { id: 3, name: 'Veterans Support Network', description: 'Mental health and physical rehabilitation support for military veterans transitioning to civilian life.', raised: '£36,200', category: 'Veterans', website: 'https://example.com' },
-    { id: 4, name: 'Medical Relief Intl', description: 'Delivering urgent medical supplies and training local staff in crisis zones around the globe.', raised: '£15,400', category: 'Health', website: 'https://example.com' },
-    { id: 5, name: 'Ocean Protectors', description: 'Cleaning the oceans by removing plastics and fighting for marine life conservation.', raised: '£22,100', category: 'Environment', website: 'https://example.com' },
-    { id: 6, name: 'Local Food Banks UK', description: 'Ensuring no family goes hungry. Distributing meals to communities facing food insecurity.', raised: '£55,900', category: 'Community', website: 'https://example.com' },
+    { id: 1, name: 'Children First Foundation', description: 'Providing education, healthcare, and safe housing to underprivileged children worldwide. Every contribution helps build a school or medical center.', raised: '₹42,80,000', category: 'Children', website: 'https://example.com' },
+    { id: 2, name: 'Green Earth Initiative', description: 'Planting trees, fighting deforestation, and restoring ecosystems damaged by climate change. Join us to make the planet green again.', raised: '₹28,50,000', category: 'Environment', website: 'https://example.com' },
+    { id: 3, name: 'Veterans Support Network', description: 'Mental health and physical rehabilitation support for military veterans transitioning to civilian life.', raised: '₹36,20,000', category: 'Veterans', website: 'https://example.com' },
+    { id: 4, name: 'Medical Relief Intl', description: 'Delivering urgent medical supplies and training local staff in crisis zones around the globe.', raised: '₹15,40,000', category: 'Health', website: 'https://example.com' },
+    { id: 5, name: 'Ocean Protectors', description: 'Cleaning the oceans by removing plastics and fighting for marine life conservation.', raised: '₹22,10,000', category: 'Environment', website: 'https://example.com' },
+    { id: 6, name: 'Local Food Banks UK', description: 'Ensuring no family goes hungry. Distributing meals to communities facing food insecurity.', raised: '₹55,90,000', category: 'Community', website: 'https://example.com' },
   ]
 
   useEffect(() => {

@@ -261,8 +261,8 @@ export default function SignupPage() {
             <form onSubmit={handleSubmit}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-4)', marginBottom: 'var(--space-6)' }}>
                 {[
-                  { id: 'monthly', label: 'Monthly', price: '£9.99', per: '/month', sub: null },
-                  { id: 'yearly', label: 'Yearly', price: '£95.88', per: '/year', sub: 'Save £24!' },
+                  { id: 'monthly', label: 'Monthly', price: '₹999', per: '/month', sub: null },
+                  { id: 'yearly', label: 'Yearly', price: '₹9588', per: '/year', sub: 'Save ₹2400!' },
                 ].map(plan => (
                   <div
                     key={plan.id}
@@ -291,7 +291,7 @@ export default function SignupPage() {
               <div style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-5)', marginBottom: 'var(--space-6)' }}>
                 <div style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--color-text-secondary)', marginBottom: 'var(--space-3)' }}>Your subscription summary</div>
                 {[
-                  ['Plan', form.plan === 'monthly' ? 'Monthly — £9.99/month' : 'Yearly — £7.99/month'],
+                  ['Plan', form.plan === 'monthly' ? 'Monthly — ₹999/month' : 'Yearly — ₹799/month'],
                   ['Charity contribution', `${charityPct}% to your chosen charity`],
                   ['Prize pool entry', 'Automatic — every month'],
                   ['Draw format', '3, 4 or 5 score match'],

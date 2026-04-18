@@ -24,7 +24,7 @@ export default function AdminDashboard() {
       setStats({
         users: uCount || 0,
         charities: cCount || 0,
-        pool: 24600 // Mocked for now until draws system is fully in place
+        pool: 2460000 // Mocked for now until draws system is fully in place
       })
     } catch (e) {
       console.error(e)
@@ -51,7 +51,7 @@ export default function AdminDashboard() {
               </div>
               <div className="stat-card" style={{ border: '1px solid rgba(245,158,11,0.4)', background: 'rgba(245,158,11,0.05)' }}>
                 <span className="stat-card-label" style={{ color: 'var(--color-gold)' }}>Current Prize Pool</span>
-                <div className="stat-card-value" style={{ color: 'var(--color-gold)' }}>£{stats.pool.toLocaleString()}</div>
+                <div className="stat-card-value" style={{ color: 'var(--color-gold)' }}>₹{stats.pool.toLocaleString()}</div>
                 <div className="stat-card-sub">Next draw: May 2025</div>
               </div>
             </div>
@@ -136,7 +136,7 @@ export default function AdminDashboard() {
                  </div>
                  <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', margin: '8px 0' }}>Supporting education and housing mock data generator.</p>
                  <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', display: 'flex', justifyContent: 'space-between' }}>
-                   <span>Raised: £1,200</span>
+                   <span>Raised: ₹1,20,000</span>
                    <span style={{ color: 'var(--color-danger)', cursor: 'pointer' }}>Suspend</span>
                  </div>
                 </div>

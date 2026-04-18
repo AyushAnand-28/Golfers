@@ -29,7 +29,7 @@ create table public.charities (
   image_url text,
   category text,
   featured boolean default false,
-  raised text default '£0',
+  raised text default '₹0',
   website text,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
@@ -127,7 +127,7 @@ create table public.winners (
 
 -- Insert dummy charities so the frontend doesn't crash on empty
 insert into public.charities (name, description, category, featured, raised) values 
-('Children First Foundation', 'Providing education and healthcare to underprivileged children worldwide.', 'Children', true, '£42,800'),
-('Green Earth Initiative', 'Fighting deforestation and restoring ecosystems.', 'Environment', false, '£28,500'),
-('Veterans Support Network', 'Mental health support for military veterans transitioning to civilian life.', 'Veterans', true, '£36,200');
+('Children First Foundation', 'Providing education and healthcare to underprivileged children worldwide.', 'Children', true, '₹42,80,000'),
+('Green Earth Initiative', 'Fighting deforestation and restoring ecosystems.', 'Environment', false, '₹28,50,000'),
+('Veterans Support Network', 'Mental health support for military veterans transitioning to civilian life.', 'Veterans', true, '₹36,20,000');
 

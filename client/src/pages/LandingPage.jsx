@@ -4,9 +4,9 @@ import { ArrowRight, Heart, Trophy, TrendingUp, Star, CheckCircle, ChevronRight,
 import { supabase } from '../lib/supabase'
 
 const CHARITIES_MOCK = [
-  { id: 1, name: 'Children First Foundation', description: 'Providing education and healthcare to underprivileged children worldwide.', raised: '£42,800', image: null, category: 'Children' },
-  { id: 2, name: 'Green Earth Initiative', description: 'Planting trees and restoring ecosystems damaged by climate change.', raised: '£28,500', image: null, category: 'Environment' },
-  { id: 3, name: 'Veterans Support Network', description: 'Mental health and rehabilitation support for military veterans.', raised: '£36,200', image: null, category: 'Veterans' },
+  { id: 1, name: 'Children First Foundation', description: 'Providing education and healthcare to underprivileged children worldwide.', raised: '₹42,80,000', image: null, category: 'Children' },
+  { id: 2, name: 'Green Earth Initiative', description: 'Planting trees and restoring ecosystems damaged by climate change.', raised: '₹28,50,000', image: null, category: 'Environment' },
+  { id: 3, name: 'Veterans Support Network', description: 'Mental health and rehabilitation support for military veterans.', raised: '₹36,20,000', image: null, category: 'Veterans' },
 ]
 
 const HOW_IT_WORKS = [
@@ -24,9 +24,9 @@ const FEATURES = [
 ]
 
 const STATS = [
-  { value: '£480K+', label: 'Prize Pool Distributed', color: 'var(--color-gold)' },
+  { value: '₹4.8 Crores+', label: 'Prize Pool Distributed', color: 'var(--color-gold)' },
   { value: '12,400+', label: 'Active Members', color: 'var(--color-emerald)' },
-  { value: '£190K+', label: 'Donated to Charities', color: '#60a5fa' },
+  { value: '₹1.9 Crores+', label: 'Donated to Charities', color: '#60a5fa' },
   { value: '47', label: 'Charities Supported', color: '#c084fc' },
 ]
 
@@ -109,7 +109,7 @@ export default function LandingPage() {
             {/* CTAs */}
             <div className="animate-fade-up animate-delay-3" style={{ display: 'flex', gap: 'var(--space-4)', justifyContent: 'center', flexWrap: 'wrap', marginBottom: 'var(--space-12)' }}>
               <Link to="/signup" className="btn btn-primary btn-lg">
-                Start for £9.99/month <ArrowRight size={18} />
+                Start for ₹999/month <ArrowRight size={18} />
               </Link>
               <Link to="/how-it-works" className="btn btn-secondary btn-lg">
                 See How It Works
@@ -249,17 +249,17 @@ export default function LandingPage() {
                   Current Jackpot
                 </div>
                 <div style={{ fontSize: '4rem', fontWeight: 900, background: 'var(--gradient-gold)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', lineHeight: 1, fontFamily: 'var(--font-primary)' }}>
-                  £24,600
+                  ₹24,600
                 </div>
                 <div style={{ color: 'var(--color-text-muted)', marginTop: 'var(--space-2)', fontSize: '0.9rem' }}>May 2025 Draw</div>
                 <div style={{ height: 1, background: 'var(--color-border)', margin: 'var(--space-6) 0' }} />
                 <div style={{ display: 'flex', justifyContent: 'space-around' }}>
                   <div>
-                    <div style={{ fontWeight: 700, color: '#60a5fa', fontSize: '1.25rem' }}>£21,420</div>
+                    <div style={{ fontWeight: 700, color: '#60a5fa', fontSize: '1.25rem' }}>₹21,42,000</div>
                     <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>4-Match Pool</div>
                   </div>
                   <div>
-                    <div style={{ fontWeight: 700, color: 'var(--color-emerald)', fontSize: '1.25rem' }}>£15,300</div>
+                    <div style={{ fontWeight: 700, color: 'var(--color-emerald)', fontSize: '1.25rem' }}>₹15,30,000</div>
                     <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>3-Match Pool</div>
                   </div>
                 </div>
@@ -310,7 +310,7 @@ export default function LandingPage() {
                 <p style={{ fontSize: '1rem', lineHeight: 1.7, marginBottom: 'var(--space-6)' }}>{featuredCharity.description}</p>
                 <div style={{ display: 'flex', gap: 'var(--space-6)', marginBottom: 'var(--space-6)' }}>
                   <div>
-                    <div style={{ fontWeight: 700, color: 'var(--color-emerald)', fontSize: '1.5rem' }}>{featuredCharity.raised || '£42,800'}</div>
+                    <div style={{ fontWeight: 700, color: 'var(--color-emerald)', fontSize: '1.5rem' }}>{featuredCharity.raised || '₹42,80,000'}</div>
                     <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Raised this year</div>
                   </div>
                   <div>
@@ -335,9 +335,9 @@ export default function LandingPage() {
                   <div style={{ height: '100%', width: '72%', background: 'var(--gradient-emerald)', borderRadius: 4, transition: 'width 1s ease' }} />
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
-                  <span>£0</span>
+                  <span>₹0</span>
                   <span style={{ color: 'var(--color-emerald)', fontWeight: 600 }}>72% of goal</span>
-                  <span>£60K</span>
+                  <span>₹60 Lakhs</span>
                 </div>
               </div>
             </div>
@@ -360,7 +360,7 @@ export default function LandingPage() {
                   {charity.description}
                 </p>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <div style={{ fontWeight: 700, color: 'var(--color-emerald)', fontSize: '1rem' }}>{charity.raised || '£28,500'}</div>
+                  <div style={{ fontWeight: 700, color: 'var(--color-emerald)', fontSize: '1rem' }}>{charity.raised || '₹28,50,000'}</div>
                   <Link to="/charities" style={{ color: 'var(--color-emerald)', fontSize: '0.875rem', display: 'flex', alignItems: 'center', gap: 4 }}>
                     Learn more <ChevronRight size={14} />
                   </Link>
@@ -420,11 +420,11 @@ export default function LandingPage() {
               <div style={{ marginBottom: 'var(--space-6)' }}>
                 <div style={{ fontWeight: 600, color: 'var(--color-text-secondary)', marginBottom: 8 }}>Monthly</div>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-                  <span style={{ fontSize: '3rem', fontWeight: 900, color: 'var(--color-text-primary)', fontFamily: 'var(--font-primary)' }}>£9.99</span>
+                  <span style={{ fontSize: '3rem', fontWeight: 900, color: 'var(--color-text-primary)', fontFamily: 'var(--font-primary)' }}>₹999</span>
                   <span style={{ color: 'var(--color-text-muted)' }}>/month</span>
                 </div>
               </div>
-              {['Monthly draw entry', 'Track 5 rolling scores', 'Choose your charity', 'Cancel anytime', 'Win up to £24K jackpot'].map((f, i) => (
+              {['Monthly draw entry', 'Track 5 rolling scores', 'Choose your charity', 'Cancel anytime', 'Win up to ₹24K jackpot'].map((f, i) => (
                 <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: 12 }}>
                   <CheckCircle size={16} style={{ color: 'var(--color-emerald)', flexShrink: 0, marginTop: 2 }} />
                   <span style={{ fontSize: '0.9rem', color: 'var(--color-text-secondary)' }}>{f}</span>
@@ -450,10 +450,10 @@ export default function LandingPage() {
               <div style={{ marginBottom: 'var(--space-6)' }}>
                 <div style={{ fontWeight: 600, color: 'var(--color-emerald)', marginBottom: 8 }}>Yearly</div>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
-                  <span style={{ fontSize: '3rem', fontWeight: 900, color: 'var(--color-text-primary)', fontFamily: 'var(--font-primary)' }}>£95.88</span>
+                  <span style={{ fontSize: '3rem', fontWeight: 900, color: 'var(--color-text-primary)', fontFamily: 'var(--font-primary)' }}>₹9588</span>
                   <span style={{ color: 'var(--color-text-muted)' }}>/year</span>
                 </div>
-                <div style={{ fontSize: '0.875rem', color: 'var(--color-emerald)', marginTop: 4 }}>Just £7.99/month — Save £24!</div>
+                <div style={{ fontSize: '0.875rem', color: 'var(--color-emerald)', marginTop: 4 }}>Just ₹799/month — Save ₹2400!</div>
               </div>
               {['Everything in monthly', '12 draw entries per year', 'Priority verification', 'Charity impact report', 'Exclusive yearly badge'].map((f, i) => (
                 <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: 12 }}>

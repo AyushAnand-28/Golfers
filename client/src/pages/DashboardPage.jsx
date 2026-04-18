@@ -125,7 +125,7 @@ export default function DashboardPage() {
               <div className="stat-card">
                 <span className="stat-card-label">Next Draw In</span>
                 <div className="stat-card-value">12 <span style={{ fontSize: '1rem', color: 'var(--color-text-muted)', fontWeight: 600 }}>Days</span></div>
-                <div className="stat-card-sub" style={{ color: 'var(--color-emerald)', display: 'flex', alignItems: 'center', gap: 4 }}><Trophy size={14} /> Est. Jackpot: £24K+</div>
+                <div className="stat-card-sub" style={{ color: 'var(--color-emerald)', display: 'flex', alignItems: 'center', gap: 4 }}><Trophy size={14} /> Est. Jackpot: ₹24 Lakhs+</div>
               </div>
               
               <div className="stat-card">
@@ -141,7 +141,7 @@ export default function DashboardPage() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
                   <Heart size={32} color="var(--color-emerald)" style={{ filter: 'drop-shadow(0 0 8px rgba(16,185,129,0.4))' }} />
                   <div>
-                    <div style={{ fontSize: '1.5rem', fontWeight: 800, lineHeight: 1 }}>£48.50</div>
+                    <div style={{ fontSize: '1.5rem', fontWeight: 800, lineHeight: 1 }}>₹4850</div>
                     <div style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>donated so far</div>
                   </div>
                 </div>
@@ -263,7 +263,7 @@ export default function DashboardPage() {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div>
                   <div style={{ fontWeight: 600, fontSize: '1.125rem' }}>Monthly Entry Plan</div>
-                  <div style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>£9.99 / month</div>
+                  <div style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>₹999 / month</div>
                 </div>
                 <span className="badge badge-success">Active</span>
               </div>
@@ -277,7 +277,7 @@ export default function DashboardPage() {
              <table className="table" style={{ marginTop: 'var(--space-4)' }}>
               <thead><tr><th>Date</th><th>Amount</th><th>Status</th></tr></thead>
               <tbody>
-                <tr><td>{new Date().toLocaleDateString()}</td><td>£9.99</td><td><span className="badge badge-success">Paid</span></td></tr>
+                <tr><td>{new Date().toLocaleDateString()}</td><td>₹999</td><td><span className="badge badge-success">Paid</span></td></tr>
               </tbody>
             </table>
           </div>

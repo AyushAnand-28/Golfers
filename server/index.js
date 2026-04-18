@@ -104,14 +104,14 @@ app.post('/api/admin/draw/simulate', async (req, res) => {
     // const { data: userScores } = await supabase.from('scores').select('*').in('user_id', activeSubs.map(s => s.user_id));
     
     // For algorithm demonstration: Create dummy dataset
-    const TICKET_PRICE = 9.99;
+    const TICKET_PRICE = 999;
     const CHARITY_PERCENTAGE = 0.10; // Averaged for simplicity here
     const PLATFORM_FEE = 0.15;
     const PRIZE_POOL_PERCENTAGE = 1 - (CHARITY_PERCENTAGE + PLATFORM_FEE); // 75% goes to prize pool
 
     const totalSubscribers = 1500; // Mock 1500 subs
     const grossRevenue = totalSubscribers * TICKET_PRICE;
-    const generatedPrizePool = grossRevenue * PRIZE_POOL_PERCENTAGE; // Roughly £11,238
+    const generatedPrizePool = grossRevenue * PRIZE_POOL_PERCENTAGE; // Roughly ₹11,23,800
     
     // Generate 5 winning numbers (1-45)
     let winningNumbers = [];
@@ -146,17 +146,17 @@ app.post('/api/admin/draw/simulate', async (req, res) => {
       draw: {
         winningNumbers: winningNumbers.sort((a,b)=>a-b),
         financials: {
-          grossRevenue: `£${grossRevenue.toFixed(2)}`,
-          prizePoolGenerated: `£${generatedPrizePool.toFixed(2)}`,
+          grossRevenue: `₹${grossRevenue.toFixed(2)}`,
+          prizePoolGenerated: `₹${generatedPrizePool.toFixed(2)}`,
         },
         distribution: {
-          threeMatch: { winners: matches3, totalPool: `£${pool3.toFixed(2)}`, payoutPerWinner: `£${payout3}` },
-          fourMatch: { winners: matches4, totalPool: `£${pool4.toFixed(2)}`, payoutPerWinner: `£${payout4}` },
-          fiveMatch: { winners: matches5, totalPool: `£${pool5.toFixed(2)}`, payoutPerWinner: `£${payout5}` },
+          threeMatch: { winners: matches3, totalPool: `₹${pool3.toFixed(2)}`, payoutPerWinner: `₹${payout3}` },
+          fourMatch: { winners: matches4, totalPool: `₹${pool4.toFixed(2)}`, payoutPerWinner: `₹${payout4}` },
+          fiveMatch: { winners: matches5, totalPool: `₹${pool5.toFixed(2)}`, payoutPerWinner: `₹${payout5}` },
         },
         rollover: {
           triggered: matches5 === 0,
-          amountRolledOverToNextMonth: `£${jackpotRolloverAmount.toFixed(2)}`
+          amountRolledOverToNextMonth: `₹${jackpotRolloverAmount.toFixed(2)}`
         }
       }
     });
