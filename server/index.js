@@ -14,8 +14,22 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_KEY || 'placeholder'
 );
 
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:3000',
+  process.env.CLIENT_URL,
+].filter(Boolean);
+
 app.use(cors({
-  origin: process.env.CLIENT_URL || '*'
+  origin: function(origin, callback) {
+    // Allow requests with no origin (curl, Postman, server-to-server)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    // Also allow any vercel.app subdomain
+    if (origin.endsWith('.vercel.app')) return callback(null, true);
+    callback(new Error('Not allowed by CORS: ' + origin));
+  },
+  credentials: true
 }));
 app.use(express.json());
 
@@ -50,8 +64,11 @@ app.post('/api/create-razorpay-order', async (req, res) => {
     const order = await razorpay.orders.create(options);
     res.json({ order, key_id: process.env.RAZORPAY_KEY_ID });
   } catch (error) {
-    console.error('Razorpay Error:', error);
-    res.status(500).json({ error: error.message });
+    console.error('Razorpay Error:', JSON.stringify(error));
+    res.status(500).json({
+      error: error?.error?.description || error?.error?.code || error?.message || 'Order creation failed',
+      details: error?.error || null
+    });
   }
 });
 
