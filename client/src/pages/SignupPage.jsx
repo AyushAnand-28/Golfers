@@ -82,7 +82,6 @@ export default function SignupPage() {
       if (!loaded) throw new Error('Razorpay failed to load. Check your connection.');
 
       // 3. Create Razorpay Order from backend
-      // Assuming backend is proxying or available on REACT_APP_API_URL or relative
       const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:3001'
       const res = await fetch(`${backendUrl}/api/create-razorpay-order`, {
         method: 'POST',
@@ -91,7 +90,7 @@ export default function SignupPage() {
       });
       const data = await res.json();
       
-      if (!res.ok) throw new Error(data.error || 'Failed to initialize payment');
+      if (!res.ok) throw new Error(data.error?.description || data.error?.message || data.error || 'Failed to initialize payment');
 
       // 4. Open Razorpay Interface
       const options = {
