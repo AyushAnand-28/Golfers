@@ -55,11 +55,12 @@ app.post('/api/create-razorpay-order', async (req, res) => {
     // Generate pricing amount in Paise (Razorpay expects smallest currency unit)
     const amount = plan === 'yearly' ? 9590 * 100 : 999 * 100;
 
-    const options = {
-      amount,
-      currency: "INR",
-      receipt: `receipt_${userId}_${Math.floor(Date.now() / 1000)}`
-    };
+      const shortId = userId.substring(0, 8);
+      const options = {
+        amount,
+        currency: "INR",
+        receipt: `rcpt_${shortId}_${Math.floor(Date.now() / 1000)}`
+      };
 
     const order = await razorpay.orders.create(options);
     res.json({ order, key_id: process.env.RAZORPAY_KEY_ID });
